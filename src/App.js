@@ -3,6 +3,8 @@
 import Layout from "./layout/Layout";
 import Event from "./pages/Event";
 import './index.css'
+import testingTest from './components/testingTest'
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
     </main> */}
   <Layout>
       <Event/>
+      {/* <testingTest /> */}
   </Layout>
     </>
   );

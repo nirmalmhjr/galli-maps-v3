@@ -4,18 +4,52 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTable from "../Data Table/DataTable";
 import Chip from "@mui/material/Chip";
 
 export default function EventStatusWise() {
-  const [requestCount, setRequestCount] = useState(2);
+  const [requestCount, setRequestCount] = useState(0);
   const [value, setValue] = useState("1");
+
+  const [requestData, setRequestData] = useState([]);
+  const [approvedData, setApprovedData] = useState([]);
+  const [rejectedData, setRejectedData] = useState([]);
 
   //   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    async function dataFetch() {
+      try {
+        const response = await fetch(
+          "https://auth-dev.gallimap.com/api/v1/normal-events?"
+        );
+        const data = await response.json();
+
+        // filter the data on basis of status
+        const request = data.data.results.filter(
+          (application) => application.status === "new"
+        );
+        const approved = data.data.results.filter(
+          (application) => application.status === "approved"
+        );
+        const rejected = data.data.results.filter(
+          (application) => application.status === "rejected"
+        );
+
+        setRequestCount(request.length);
+        setRequestData(request);
+        setApprovedData(approved);
+        setRejectedData(rejected);
+      } catch (error) {
+        console.log("Error from Fetching Data ", error);
+      }
+    }
+    dataFetch();
+  }, []);
 
   return (
     // <Box sx={{ width: '100%' }}>
@@ -45,10 +79,12 @@ export default function EventStatusWise() {
                   >
                     Request
                   </span>
+                  { value === '1' && 
                   <Chip
-                    label={requestCount}
-                    sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
-                  />{" "}
+                  size="small"
+                  label={requestCount}
+                  sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
+                />}
                 </Box>
               }
             />
@@ -73,13 +109,14 @@ export default function EventStatusWise() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ ml: -3 }}>
-          <DataTable />
+          {/* <DataTable dataList={data} /> */}
+          <DataTable dataList={requestData} />
         </TabPanel>
         <TabPanel value="2" sx={{ ml: -3 }}>
-          Approved
+          <DataTable dataList={approvedData} />
         </TabPanel>
         <TabPanel value="3" sx={{ ml: -3 }}>
-          Rejected
+          <DataTable dataList={rejectedData} />
         </TabPanel>
       </TabContext>
     </Box>

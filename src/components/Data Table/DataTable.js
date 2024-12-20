@@ -1,14 +1,43 @@
 import * as React from "react";
-import { useState , useCallback } from "react";
+import { useState, useCallback } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Box, Button } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import EventRequest from "../event request modal/EventRequest";
+import NepaliDate from "nepali-datetime";
 
-export default function DataTable() {
+import CustomFooter from './CustomFooter'
+
+export default function DataTable({ dataList }) {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+
+  // console.log("~~~~~~~`", dataList);
+
+  function formatTime(isoString, value = "date") {
+    const date = new Date(isoString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    // The hour '0' should be '12' const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+
+    // for Date
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+
+    const formattedTime = hours + " " + ampm;
+    const formattedDate = year + "/" + month + "/" + day;
+
+    return value === "date" ? formattedDate : formattedTime;
+
+    // let nepali_Date =  NepaliDate.parseEnglishDate(isoString, 'YYYY-MM-DD')
+
+    // return nepali_Date.toString()
+  }
 
   const style = {
     position: "absolute",
@@ -26,9 +55,27 @@ export default function DataTable() {
     { field: "sNo", headerName: "S.N", minWidth: 62, flex: 1 },
     { field: "eventTitle", headerName: "Event Title", minWidth: 216, flex: 3 },
     { field: "location", headerName: "Location", minWidth: 275, flex: 4 },
-    { field: "startDate", headerName: "Start Date", minWidth: 140, flex: 2 },
-    { field: "endDate", headerName: "End Date", minWidth: 183, flex: 3 },
-    { field: "time", headerName: "Time", minWidth: 134, flex: 2 },
+    {
+      field: "startDate",
+      headerName: "Start Date",
+      minWidth: 140,
+      flex: 2,
+      valueFormatter: (params) => formatTime(params, "date"),
+    },
+    {
+      field: "endDate",
+      headerName: "End Date",
+      minWidth: 183,
+      flex: 3,
+      valueFormatter: (params) => formatTime(params),
+    },
+    {
+      field: "time",
+      headerName: "Time",
+      minWidth: 134,
+      flex: 2,
+      valueFormatter: (params) => formatTime(params, "time"),
+    },
     {
       field: "action",
       headerName: "Action",
@@ -48,160 +95,60 @@ export default function DataTable() {
     },
   ];
 
-  const rows = [
+  /* const rows = [
     // {sNo: , eventTitle: , location: ,startDate: , endDate: , time: , action: },
-    {
-      id: 1,
-      sNo: 1,
-      eventTitle: "Jyapu Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 2,
-      sNo: 2,
-      eventTitle: "Newa Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 3,
-      sNo: 3,
-      eventTitle: "Tamang Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 4,
-      sNo: 4,
-      eventTitle: "Sherpa Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 5,
-      sNo: 5,
-      eventTitle: "Loshar Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 6,
-      sNo: 6,
-      eventTitle: "Maithali Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 7,
-      sNo: 7,
-      eventTitle: "Himal Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 8,
-      sNo: 8,
-      eventTitle: "Pahad Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 9,
-      sNo: 9,
-      eventTitle: "Terai Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 10,
-      sNo: 10,
-      eventTitle: "Kathmandu Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 11,
-      sNo: 11,
-      eventTitle: "Patan Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
-    {
-      id: 12,
-      sNo: 12,
-      eventTitle: "Bhaktapur Diwas",
-      location: "Basantapur, Lalitpur",
-      startDate: "2081/08/30",
-      endDate: "2081/08/30",
-      time: "11 AM",
-      action: "view more",
-    },
+    dataList.map((data)=>{
+      {
+        id: data._id,
+        sNo: 1234,
+        eventTitle: data.name ,
+        location: data.location,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        time: data.publishDate,
+        action: "view more",
+      },
+    })
+  ] */
 
-    // { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    // { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    // { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    // { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    // { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  ];
+  const rows = dataList.map((data, index) => ({
+    id: data._id,
+    sNo: index + 1,
+    eventTitle: data.name,
+    location: data.address,
+    startDate: data.startDate,
+    // startDate: NepaliDate.parseEnglishDate(data.startDate, "YYYY-MM-DD"),
+    endDate: data.endDate,
+    time: data.publishDate,
+    action: "view more",
+  }));
 
   const paginationModel = { page: 0, pageSize: 10 };
 
-  // function handleViewMore(row) {
-  //   setOpen(true);
-  //   setSelectedRow(row);
-  //   // console.log("row data form handleViewMore() ", row);
-  // }
-
-  const handleViewMore = useCallback((row) => {
+  function handleViewMore(row) {
+    const filteredRow = dataList.find((data) => data._id === row.id);
     setOpen(true);
-    setSelectedRow(row);
-  }, []);
+    setSelectedRow(filteredRow);
+  }
 
-  // function handleClose() {
+  // const handleViewMore = useCallback((row) => {
+  //   const filteredRow = dataList.find((data) => data._id === row.id);
+  //   setOpen(true);
+  //   // setSelectedRow(row);
+
+  //   setSelectedRow(filteredRow);
+  // }, []);
+
+  function handleClose() {
+    setOpen(false);
+    setSelectedRow(null);
+  }
+
+  // const handleClose = useCallback(() => {
   //   setOpen(false);
   //   setSelectedRow(null);
   //   console.log("handle close clicked");
-  // }
-
-  const handleClose = useCallback(()=>{
-    setOpen(false)
-    setSelectedRow(null)
-    console.log('handle close clicked');
-  })
+  // }, []);
 
   return (
     // <Paper sx={{ height: 400, width: '100%' }}>
@@ -217,6 +164,7 @@ export default function DataTable() {
         columns={columns}
         rowHeight={44}
         initialState={{ pagination: { paginationModel } }}
+        pagination={false}
         pageSizeOptions={[10]}
         // checkboxSelection
         sx={{
@@ -229,13 +177,25 @@ export default function DataTable() {
           },
           // "& .MuiDataGrid-columnHeaders": { backgroundColor: "green" },
         }}
-        strictHeights={true}
+        // strictHeights={true}
+        disableColumnSorting
+        disableRowSelectionOnClick
+        components={{
+          Footer: CustomFooter
+        }}
+        componentsProps={{ footer: { rowCount: rows.length, }, }}
       />
+
+        
+
       {/* for Modal value */}
       <Modal open={open} onClose={handleClose}>
         <Box style={style}>
           {selectedRow && (
-            <EventRequest onCloseClick={(prev) => setOpen(prev)} />
+            <EventRequest
+              onCloseClick={(prev) => setOpen(prev)}
+              row={selectedRow}
+            />
           )}
         </Box>
       </Modal>
