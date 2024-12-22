@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-// import eventImage from '../assets/images/event_banner.png';
-
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import AspectRatio from "@mui/joy/AspectRatio";
 
 const style = {
   position: "absolute",
@@ -120,6 +117,12 @@ export default function EventRequest({ onCloseClick, row }) {
     setSelectedImage(null);
   };
 
+  const bannerImage = row.bannerImage
+    ? row.bannerImage
+    : row.image
+    ? row.image
+    : "";
+
   return (
     <div className="h-screen w-[572px] bg-white pl-4 overflow-auto ">
       <div className="bg-[#F6F5F5]  flex justify-between items-center h-14 ml-[-16px]">
@@ -129,6 +132,7 @@ export default function EventRequest({ onCloseClick, row }) {
             <Button
               variant="contained"
               sx={{
+                display: row.status === "approved" ? "block" : "none",
                 bgcolor: "#D0F5E1",
                 color: "#27BE69",
                 width: 91,
@@ -145,6 +149,7 @@ export default function EventRequest({ onCloseClick, row }) {
             <Button
               variant="contained"
               sx={{
+                display: row.status === "rejected" ? "block" : "none",
                 bgcolor: "#FFE2E3",
                 color: "#F2415A",
                 width: 91,
@@ -165,7 +170,9 @@ export default function EventRequest({ onCloseClick, row }) {
       <div>
         <p>Verification</p>
         {/* <Button variant='contained' color='#295BFF'> */}
-        <div className="space-x-2">
+        <div
+          className={`space-x-2 ${row.status === "new" ? "block" : "hidden"}`}
+        >
           <Button
             variant="contained"
             sx={{
@@ -301,18 +308,20 @@ export default function EventRequest({ onCloseClick, row }) {
         {/* Event Banner */}
         <div className="mt-4">
           <h2 className="border-b font-medium">Event Banner</h2>
-          <img
-            onClick={handleOpen}
-            className="w-36 h-30 rounded mt-3"
-            src={`https://assets-dev.gallimap.com${row.bannerImage}`}
-            alt=""
-          />
+          {bannerImage && (
+            <img
+              onClick={handleOpen}
+              className="w-36 h-32 rounded mt-3 object-cover"
+              src={`https://assets-dev.gallimap.com${bannerImage}`}
+              alt=""
+            />
+          )}
           <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
               <img
                 onClick={handleOpen}
                 className="w-fit h-screen rounded mt-3"
-                src={`https://assets-dev.gallimap.com${row.bannerImage}`}
+                src={`https://assets-dev.gallimap.com${bannerImage}`}
                 alt=""
               />
             </Box>
@@ -326,7 +335,7 @@ export default function EventRequest({ onCloseClick, row }) {
             {row.images.map((image, index) => (
               <img
                 key={index}
-                className="w-36 h-30 ml-3 rounded mt-3"
+                className="w-36 h-32 ml-3 rounded mt-3 object-cover"
                 src={`https://assets-dev.gallimap.com${image}`}
                 alt=""
                 onClick={() => handleOpenEvent(image)}
