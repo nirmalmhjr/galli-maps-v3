@@ -127,11 +127,24 @@ export default function DataTable({ dataList }) {
     setOpen(true);
     setSelectedRow(filteredRow);
   }
+  // const handleViewMore = useCallback(
+  //   (row) => {
+  //     const filteredRow = dataList.find((data) => data._id === row.id);
+  //     setOpen(true);
+  //     setSelectedRow(filteredRow);
+  //   },
+  //   [dataList]
+  // );
 
   function handleClose() {
     setOpen(false);
     setSelectedRow(null);
   }
+
+  // const handleClose = useCallback(() => {
+  //   setOpen(false);
+  //   setSelectedRow(null);
+  // }, []);
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -145,6 +158,11 @@ export default function DataTable({ dataList }) {
     setPaginationModel({ ...paginationModel, page: newPage });
   };
 
+  // const handlePageChange = useCallback((newPage) => {
+  //   setPaginationModel((prev) => ({ ...prev, page: newPage }));
+  // }, []);
+
+  // const renderPaginationItems = useCallback(() => {
   const renderPaginationItems = () => {
     const items = [];
 
