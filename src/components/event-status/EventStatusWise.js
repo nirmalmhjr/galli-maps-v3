@@ -16,7 +16,6 @@ export default function EventStatusWise() {
   const [approvedData, setApprovedData] = useState([]);
   const [rejectedData, setRejectedData] = useState([]);
 
-  //   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -79,12 +78,13 @@ export default function EventStatusWise() {
                   >
                     Request
                   </span>
-                  { value === '1' && 
-                  <Chip
-                  size="small"
-                  label={requestCount}
-                  sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
-                />}
+                  {value === "1" && (
+                    <Chip
+                      size="small"
+                      label={requestCount}
+                      sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
+                    />
+                  )}
                 </Box>
               }
             />
