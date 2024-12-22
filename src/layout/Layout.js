@@ -8,7 +8,7 @@ export default function Layout({ children }) {
       <div className="w-60">
         <Sidebar />
       </div>
-      <div className="flex-1">
+      <div className="flex-auto w-full">
         <Topbar />
         <main>{children}</main>
       </div>

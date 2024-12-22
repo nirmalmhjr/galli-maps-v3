@@ -4,17 +4,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 // import eventImage from '../assets/images/event_banner.png';
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "background.paper",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-// };
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import AspectRatio from "@mui/joy/AspectRatio";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function EventRequest({ onCloseClick, row }) {
   const [socialMedia, setSocialMedia] = useState({
@@ -102,6 +103,22 @@ export default function EventRequest({ onCloseClick, row }) {
       }
     }
   } */
+
+  const [open, setOpen] = useState(false);
+  const [openEvent, setOpenEvent] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleOpenEvent = (image) => {
+    setOpenEvent(true);
+    setSelectedImage(image);
+  };
+  const handleCloseEvent = () => {
+    setOpenEvent(false);
+    setSelectedImage(null);
+  };
 
   return (
     <div className="h-screen w-[572px] bg-white pl-4 overflow-auto ">
@@ -285,34 +302,46 @@ export default function EventRequest({ onCloseClick, row }) {
         <div className="mt-4">
           <h2 className="border-b font-medium">Event Banner</h2>
           <img
+            onClick={handleOpen}
             className="w-36 h-30 rounded mt-3"
             src={`https://assets-dev.gallimap.com${row.bannerImage}`}
             alt=""
           />
+          <Modal open={open} onClose={handleClose}>
+            <Box sx={style}>
+              <img
+                onClick={handleOpen}
+                className="w-fit h-screen rounded mt-3"
+                src={`https://assets-dev.gallimap.com${row.bannerImage}`}
+                alt=""
+              />
+            </Box>
+          </Modal>
         </div>
 
         {/* Event Image */}
         <div className="mt-4 mb-4">
           <h2 className="border-b font-medium">Event Image</h2>
           <div className="flex flex-wrap ">
-            {/* <img
-              className="w-36 h-30 rounded mt-3"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFBaIACKazHeV4CX3HI-Eqa2Nz2DBrTV5Rrq2FK8Lddnonr8RVnmx7VSkUuT3zpp30HbA&usqp=CAU"
-              alt=""
-            />
-            <img
-              className="w-36 h-30 ml-3 rounded mt-3"
-              src="https://century.com.np/wp-content/uploads/2021/12/yomari.jpg"
-              alt=""
-            /> */}
             {row.images.map((image, index) => (
               <img
                 key={index}
                 className="w-36 h-30 ml-3 rounded mt-3"
                 src={`https://assets-dev.gallimap.com${image}`}
                 alt=""
+                onClick={() => handleOpenEvent(image)}
               />
             ))}
+            <Modal open={openEvent} onClose={handleCloseEvent}>
+              <Box sx={style}>
+                <img
+                  onClick={handleOpenEvent}
+                  className="w-fit h-screen rounded mt-3"
+                  src={`https://assets-dev.gallimap.com${selectedImage}`}
+                  alt=""
+                />
+              </Box>
+            </Modal>
           </div>
         </div>
       </div>
