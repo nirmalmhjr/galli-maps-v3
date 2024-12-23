@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import { Box, Button, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import EventRequest from "../event request modal/EventRequest";
-import NepaliDate from "nepali-datetime";
+import { formatTime } from "../../utils/dateTimeConverter";
 
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -13,30 +13,6 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 export default function DataTable({ dataList }) {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
-  function formatTime(isoString, value = "date") {
-    const date = new Date(isoString);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    // The hour '0' should be '12' const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-
-    // for Date
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-
-    const formattedTime = hours + " " + ampm;
-    const formattedDate = year + "/" + month + "/" + day;
-
-    return value === "date" ? formattedDate : formattedTime;
-
-    // let nepali_Date =  NepaliDate.parseEnglishDate(isoString, 'YYYY-MM-DD')
-
-    // return nepali_Date.toString()
-  }
 
   const style = {
     position: "absolute",
@@ -116,7 +92,6 @@ export default function DataTable({ dataList }) {
     eventTitle: data.name,
     location: data.address,
     startDate: data.startDate,
-    // startDate: NepaliDate.parseEnglishDate(data.startDate, "YYYY-MM-DD"),
     endDate: data.endDate,
     time: data.publishDate,
     action: "view more",
@@ -230,6 +205,7 @@ export default function DataTable({ dataList }) {
             },
           }}
           disableColumnSorting
+          disableColumnMenu
           disableRowSelectionOnClick
           // onPageChange ={(params) => handlePageChange(params.page)}
           // onPageChange={(params) => console.log(params)}

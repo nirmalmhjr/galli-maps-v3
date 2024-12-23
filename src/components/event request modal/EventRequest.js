@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { formatTime } from "../../utils/dateTimeConverter";
 
 const style = {
   position: "absolute",
@@ -216,15 +217,15 @@ export default function EventRequest({ onCloseClick, row }) {
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Start Date:</p>
-            <p className="font-medium">{row.startDate}</p>
+            <p className="font-medium">{formatTime(row.startDate)}</p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>End date:</p>
-            <p className="font-medium">{row.endDate}</p>
+            <p className="font-medium">{formatTime(row.endDate)}</p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Time</p>
-            <p className="font-medium">{row.publishDate}</p>
+            <p className="font-medium">{formatTime(row.publishDate, "time")}</p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Event type:</p>
@@ -256,7 +257,7 @@ export default function EventRequest({ onCloseClick, row }) {
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Requested Date:</p>
-            <p className="font-medium">{row.publishDate}</p>
+            <p className="font-medium">{formatTime(row.publishDate)}</p>
           </div>
         </div>
 
