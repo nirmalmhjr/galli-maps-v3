@@ -7,6 +7,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useEffect, useState } from "react";
 import DataTable from "../Data Table/DataTable";
 import Chip from "@mui/material/Chip";
+import conf from "../../conf/conf";
 
 export default function EventStatusWise() {
   const [requestCount, setRequestCount] = useState(0);
@@ -15,43 +16,46 @@ export default function EventStatusWise() {
   const [requestData, setRequestData] = useState([]);
   const [approvedData, setApprovedData] = useState([]);
   const [rejectedData, setRejectedData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-    async function dataFetch() {
-      try {
-        const response = await fetch(
-          "https://auth-dev.gallimap.com/api/v1/normal-events?"
-        );
-        const data = await response.json();
+  async function dataFetch() {
+    try {
+      const response = await fetch(`${conf.apiUrl}/normal-events`);
+      const data = await response.json();
 
-        // filter the data on basis of status
-        const request = data.data.results.filter(
-          (application) => application.status === "new"
-        );
-        const approved = data.data.results.filter(
-          (application) => application.status === "approved"
-        );
-        const rejected = data.data.results.filter(
-          (application) => application.status === "rejected"
-        );
+      // filter the data on basis of status
+      const request = data.data.results.filter(
+        (application) => application.status === "new"
+      );
+      const approved = data.data.results.filter(
+        (application) => application.status === "approved"
+      );
+      const rejected = data.data.results.filter(
+        (application) => application.status === "rejected"
+      );
 
-        setRequestCount(request.length);
-        setRequestData(request);
-        setApprovedData(approved);
-        setRejectedData(rejected);
-      } catch (error) {
-        console.log("Error from Fetching Data ", error);
-      }
+      setRequestCount(request.length);
+      setRequestData(request);
+      setApprovedData(approved);
+      setRejectedData(rejected);
+    } catch (error) {
+      console.log("Error from Fetching Data ", error);
     }
+  }
+
+  function triggerRefresh() {
+    setRefresh(!refresh);
+  }
+
+  useEffect(() => {
     dataFetch();
-  }, []);
+  }, [refresh]);
 
   return (
-    // <Box sx={{ width: '100%' }}>
     <Box>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -109,8 +113,7 @@ export default function EventStatusWise() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ ml: -3 }}>
-          {/* <DataTable dataList={data} /> */}
-          <DataTable dataList={requestData} />
+          <DataTable dataList={requestData} triggerRefresh={triggerRefresh} />
         </TabPanel>
         <TabPanel value="2" sx={{ ml: -3 }}>
           <DataTable dataList={approvedData} />

@@ -5,6 +5,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { formatTime } from "../../utils/dateTimeConverter";
+import conf from "../../conf/conf";
 
 const style = {
   position: "absolute",
@@ -15,7 +16,7 @@ const style = {
   p: 4,
 };
 
-export default function EventRequest({ onCloseClick, row }) {
+export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
   const [socialMedia, setSocialMedia] = useState({
     facebook: "-",
     website: "-",
@@ -124,11 +125,39 @@ export default function EventRequest({ onCloseClick, row }) {
     ? row.image
     : "";
 
+  const bearerToken = conf.temporaryToken;
+
+  const handleApproveReject = async (approvalStatus) => {
+    try {
+      const response = await fetch(`${conf.apiUrl}/normal-events/${row._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify({
+          status: `${approvalStatus}`,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("response is successfully Patched");
+        triggerRefresh();
+      } else {
+        console.log("response is NOT OK. Error to update data");
+      }
+    } catch (error) {
+      console.log("Failed to update the data ", error);
+    }
+
+    onCloseClick(false);
+  };
+
   return (
     <div className="h-screen w-[572px] bg-white pl-4 overflow-auto ">
       <div className="bg-[#F6F5F5]  flex justify-between items-center h-14 ml-[-16px]">
         <div className="flex items-center">
-          <h1 className="text-lg font-bold pl-4">Jyapu Diwas</h1>
+          <h1 className="text-lg font-bold pl-4">{row.name}</h1>
           <div className="ml-2">
             <Button
               variant="contained"
@@ -185,6 +214,7 @@ export default function EventRequest({ onCloseClick, row }) {
               textTransform: "none",
             }}
             marginleft={8}
+            onClick={() => handleApproveReject("approved")}
           >
             <DoneIcon />
             Approve
@@ -199,6 +229,7 @@ export default function EventRequest({ onCloseClick, row }) {
               "& .MuiSvgIcon-root": { color: "white", mr: 1, width: 16 },
               textTransform: "none",
             }}
+            onClick={() => handleApproveReject("rejected")}
           >
             <CloseIcon />
             Reject
