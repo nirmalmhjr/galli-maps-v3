@@ -6,11 +6,10 @@ import { Box, Button, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import EventRequest from "../event request modal/EventRequest";
 import { formatTime } from "../../utils/dateTimeConverter";
-
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
-export default function DataTable({ dataList }) {
+export default function DataTable({ dataList, triggerRefresh }) {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -208,7 +207,6 @@ export default function DataTable({ dataList }) {
           disableColumnMenu
           disableRowSelectionOnClick
           // onPageChange ={(params) => handlePageChange(params.page)}
-          // onPageChange={(params) => console.log(params)}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           hideFooter
@@ -221,6 +219,7 @@ export default function DataTable({ dataList }) {
               <EventRequest
                 onCloseClick={(prev) => setOpen(prev)}
                 row={selectedRow}
+                triggerRefresh={triggerRefresh}
               />
             )}
           </Box>
@@ -251,8 +250,7 @@ export default function DataTable({ dataList }) {
               color: paginationModel.page === 0 ? "#aaa" : "black",
             }}
           >
-            {/* <IconButton> */}
-            <KeyboardArrowLeftIcon /> {/* </IconButton> */}
+            <KeyboardArrowLeftIcon />
             Previous
           </button>
           <button
@@ -278,9 +276,7 @@ export default function DataTable({ dataList }) {
             }}
           >
             Next
-            {/* <IconButton> */}
             <KeyboardArrowRightIcon />
-            {/* </IconButton> */}
           </button>
         </div>
       </div>
