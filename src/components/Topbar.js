@@ -5,10 +5,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import user from "../assets/images/Ellipse 5.png";
 import changePassword from "../assets/images/lock-password.png";
 import logout from "../assets/images/logout.png";
+import { useNavigate } from "react-router-dom";
 
 function Topbar() {
   const [open, setOpen] = useState(false);
   const clickRef = useRef(null);
+  const navigate = useNavigate();
 
   function handleClickOutside(event) {
     if (clickRef.current && !clickRef.current.contains(event.target)) {
@@ -28,6 +30,11 @@ function Topbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [open]);
+
+  function handleLogout() {
+    sessionStorage.removeItem("accessToken");
+    navigate("/login", { replace: true });
+  }
 
   return (
     <div className="relative" ref={clickRef}>
@@ -61,7 +68,10 @@ function Topbar() {
           />
           <p className="text-xs ml-1 mr-2">Change Password</p>
         </button>
-        <button className=" flex w-full h-7 items-center cursor-pointer">
+        <button
+          className=" flex w-full h-7 items-center cursor-pointer"
+          onClick={handleLogout}
+        >
           <img className="ml-2 w-4 h-4 " src={logout} alt="logout" />
           <p className="text-xs ml-1">Logout</p>
         </button>

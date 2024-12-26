@@ -19,8 +19,10 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
+import { Outlet } from "react-router-dom";
 
-export default function Layout({ children }) {
+// export default function Layout({ children }) {
+export default function Layout() {
   return (
     <div className=" flex  flex-row">
       {/* <div className="w-60 lg:w-1/6"> */}
@@ -29,7 +31,10 @@ export default function Layout({ children }) {
       </div>
       <div className="flex-grow w-5/6">
         <Topbar />
-        <main >{children}</main>
+        {/* <main >{children}</main> */}
+        <main>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

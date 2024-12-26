@@ -2,6 +2,7 @@ import React from "react";
 import EventStatusWise from '../components/event-status/EventStatusWise'
 
 function Event() {
+  
   return (
     <div className="bg-[#E0E7ED] h-screen">
       <div className="p-4 ">
