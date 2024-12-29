@@ -1,36 +1,3 @@
-/* import React from "react";
-import signinLogo from "../assets/images/signin-logo.png";
-
-function LoginPage() {
-  return (
-    <div className="bg-[#F5F6FA] w-full h-screen flex justify-center items-center">
-      <div className="w-[500px] h-[520px] bg-white ">
-        <div className="flex justify-center">
-          <img
-            className="w-[121px] h-[84px]"
-            src={signinLogo}
-            alt="galli-map-logo"
-          />
-        </div>
-        <div className="h-[338px] w-[436px] mx-8 flex flex-col gap-y-6">
-          <h1 className="font-bold text-2xl"> Sign In </h1>
-          <div>
-            <div>
-              <input className="w-full h-[52px] border rounded" type="text" placeholder="Email *"/>
-            </div>
-            <div>
-              <input type="text" placeholder="Password *"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default LoginPage;
- */
-
 import React, { useState, useRef, useEffect, useContext } from "react";
 import signinLogo from "../assets/images/signin-logo.png";
 import viewOffSlash from "../assets/images/view-off-slash.png";
@@ -63,12 +30,10 @@ function LoginPage() {
     if (storedName) {
       setUsername(storedName);
       passwordRef.current.focus();
-      setRememberMe(true)
-      console.log('rememberMe', rememberMe);
+      setRememberMe(true);
     }
   }, []);
 
-  //   console.log(userName, password);
   function togglePasswordVisibilty() {
     setPasswordVisibility(!passwordVisibilty);
   }
@@ -112,7 +77,7 @@ function LoginPage() {
     if (rememberMe) {
       localStorage.setItem("userName", userName);
     } else {
-      localStorage.removeItem("userName")
+      localStorage.removeItem("userName");
     }
 
     try {
