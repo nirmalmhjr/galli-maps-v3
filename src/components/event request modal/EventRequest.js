@@ -125,7 +125,8 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     ? row.image
     : "";
 
-  const bearerToken = conf.temporaryToken;
+    const token = sessionStorage.getItem('accessToken')
+
 
   const handleApproveReject = async (approvalStatus) => {
     try {
@@ -133,7 +134,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           status: `${approvalStatus}`,

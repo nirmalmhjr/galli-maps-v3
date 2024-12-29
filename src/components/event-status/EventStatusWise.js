@@ -18,13 +18,15 @@ export default function EventStatusWise() {
   const [rejectedData, setRejectedData] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
+  const token = sessionStorage.getItem("accessToken");
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   async function dataFetch() {
     try {
-      const response = await fetch(`${conf.apiUrl}/normal-events`);
+      const response = await fetch(`${conf.apiUrl}/normal-events`)
       const data = await response.json();
 
       // filter the data on basis of status
