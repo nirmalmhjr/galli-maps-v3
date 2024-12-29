@@ -119,6 +119,10 @@ function LoginPage() {
     }
   }
 
+  function navigateToSignup(){
+    navigate("/signup", { replace: true })
+  }
+
   return (
     <div className="bg-[#F5F6FA] w-full h-screen flex flex-col justify-center items-center relative">
       <div className="w-[500px] h-[520px] bg-white ">
@@ -184,7 +188,12 @@ function LoginPage() {
           </div>
           <div className="flex justify-center">
             <p>Don't have an account? </p>
-            <p className="text-[#E37547] font-medium ml-2">Sign up</p>
+            <p
+              className="text-[#E37547] font-medium ml-2 cursor-pointer"
+              onClick={navigateToSignup}
+            >
+              Sign up
+            </p>
           </div>
         </div>
       </div>
