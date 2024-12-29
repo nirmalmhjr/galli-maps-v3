@@ -43,6 +43,7 @@ import useAuth from "../hooks/useAuth";
 
 function LoginPage() {
   const userRef = useRef();
+  const passwordRef = useRef();
   const { setAuth } = useAuth();
 
   const navigate = useNavigate();
@@ -53,9 +54,18 @@ function LoginPage() {
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
+
+    const storedName = localStorage.getItem("userName", userName);
+    if (storedName) {
+      setUsername(storedName);
+      passwordRef.current.focus();
+      setRememberMe(true)
+      console.log('rememberMe', rememberMe);
+    }
   }, []);
 
   //   console.log(userName, password);
@@ -99,6 +109,12 @@ function LoginPage() {
   async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
+    if (rememberMe) {
+      localStorage.setItem("userName", userName);
+    } else {
+      localStorage.removeItem("userName")
+    }
+
     try {
       //   const response = await fetch(`${conf.apiLogihandleLUrl}`, {
       const response = await axios.post(
@@ -169,7 +185,7 @@ function LoginPage() {
                 placeholder="Password *"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                // required
+                ref={passwordRef}
               />
               <img
                 className="absolute top-5 right-4 w-4  h-4 cursor-pointer"
@@ -180,7 +196,11 @@ function LoginPage() {
             </div>
             <div className="flex  justify-between">
               <div className="inline-flex">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe((prev) => !prev)}
+                />
                 <p className=" ml-2 font-medium ">Remember me</p>
               </div>
               <div>
