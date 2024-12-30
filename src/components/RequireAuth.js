@@ -21,8 +21,8 @@ export default function RequireAuth({ allowedRoles }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
 }
 
-// if (allowedRoles && !allowedRoles.includes(auth?.role)) {
-if (allowedRoles && !allowedRoles === auth?.role) {
+if (allowedRoles && !allowedRoles.includes(auth?.role)) {
+// if (allowedRoles && !allowedRoles === auth?.role) {
   return <Navigate to="/unauthorized" replace />
 }
 
