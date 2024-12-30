@@ -3,6 +3,7 @@
 import Layout from "./layout/Layout";
 import Event from "./pages/Event";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage"
 import "./index.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         {/* Public Routing */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage/>}/>
         {/* Redirect root to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         {/* Protected Routes */}
