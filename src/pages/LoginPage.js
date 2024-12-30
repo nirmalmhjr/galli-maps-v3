@@ -108,11 +108,12 @@ function LoginPage() {
                       placeholder="Email *"
                       name="email"
                     />
-                    {errors.email && touched.email ? (
-                      <div className="text-red-600 ml-2 mt-[1px]">
-                        {errors.email}
-                      </div>
-                    ) : null}
+
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-red-600 ml-2"
+                    />
                   </div>
                   <div className=" relative">
                     <Field
@@ -127,11 +128,11 @@ function LoginPage() {
                       src={passwordVisibilty ? viewOn : viewOffSlash}
                       onClick={() => setPasswordVisibilty(!passwordVisibilty)}
                     />
-                    {errors.password && touched.password ? (
-                      <div className="text-red-600 ml-2 mt-[1px]">
-                        {errors.password}
-                      </div>
-                    ) : null}
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="text-red-600 ml-2"
+                    />
                   </div>
                   <div className="flex  justify-between">
                     <div className="inline-flex">
