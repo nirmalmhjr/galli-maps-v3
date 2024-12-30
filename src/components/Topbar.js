@@ -32,7 +32,7 @@ function Topbar() {
   }, [open]);
 
   function handleLogout() {
-    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("token");
     navigate("/login", { replace: true });
   }
 

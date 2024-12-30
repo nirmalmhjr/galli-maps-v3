@@ -17,7 +17,7 @@ export default function RequireAuth({ allowedRoles }) {
     )
   ); */
 
-  if(!auth?.accessToken){
+  if(!auth?.token){
     return <Navigate to="/login" state={{ from: location }} replace />;
 }
 
