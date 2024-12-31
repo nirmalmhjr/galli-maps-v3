@@ -10,13 +10,14 @@ import Chip from "@mui/material/Chip";
 import conf from "../../conf/conf";
 
 export default function EventStatusWise() {
-  const [requestCount, setRequestCount] = useState(0);
   const [value, setValue] = useState("1");
 
-  const [requestData, setRequestData] = useState([]);
-  const [approvedData, setApprovedData] = useState([]);
-  const [rejectedData, setRejectedData] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [eventData, setEventData] = useState({
+    request: [],
+    approved: [],
+    rejected: [],
+    requestCount: 0,
+  });
 
   const token = sessionStorage.getItem("accessToken");
 
@@ -26,7 +27,7 @@ export default function EventStatusWise() {
 
   async function dataFetch() {
     try {
-      const response = await fetch(`${conf.apiUrl}/normal-events`)
+      const response = await fetch(`${conf.apiUrl}/normal-events`);
       const data = await response.json();
 
       // filter the data on basis of status
@@ -40,22 +41,24 @@ export default function EventStatusWise() {
         (application) => application.status === "rejected"
       );
 
-      setRequestCount(request.length);
-      setRequestData(request);
-      setApprovedData(approved);
-      setRejectedData(rejected);
+      setEventData({
+        request,
+        approved,
+        rejected,
+        requestCount: request.length,
+      });
     } catch (error) {
       console.log("Error from Fetching Data ", error);
     }
   }
 
   function triggerRefresh() {
-    setRefresh(!refresh);
+    dataFetch();
   }
 
   useEffect(() => {
     dataFetch();
-  }, [refresh]);
+  }, []);
 
   return (
     <Box>
@@ -87,7 +90,7 @@ export default function EventStatusWise() {
                   {value === "1" && (
                     <Chip
                       size="small"
-                      label={requestCount}
+                      label={eventData.requestCount}
                       sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
                     />
                   )}
@@ -115,13 +118,16 @@ export default function EventStatusWise() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ ml: -3 }}>
-          <DataTable dataList={requestData} triggerRefresh={triggerRefresh} />
+          <DataTable
+            dataList={eventData.request}
+            triggerRefresh={triggerRefresh}
+          />
         </TabPanel>
         <TabPanel value="2" sx={{ ml: -3 }}>
-          <DataTable dataList={approvedData} />
+          <DataTable dataList={eventData.approved} />
         </TabPanel>
         <TabPanel value="3" sx={{ ml: -3 }}>
-          <DataTable dataList={rejectedData} />
+          <DataTable dataList={eventData.rejected} />
         </TabPanel>
       </TabContext>
     </Box>

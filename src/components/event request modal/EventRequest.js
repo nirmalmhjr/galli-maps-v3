@@ -125,8 +125,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     ? row.image
     : "";
 
-    const token = sessionStorage.getItem('accessToken')
-
+  const token = sessionStorage.getItem("token");
 
   const handleApproveReject = async (approvalStatus) => {
     try {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { Box, Button, IconButton } from "@mui/material";
@@ -9,21 +9,22 @@ import { formatTime } from "../../utils/dateTimeConverter";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  // width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export default function DataTable({ dataList, triggerRefresh }) {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    // width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+  const [rows, setRows] = useState([]);
 
   const columns = [
     { field: "sNo", headerName: "S.N", width: 62, flex: 1 },
@@ -69,23 +70,22 @@ export default function DataTable({ dataList, triggerRefresh }) {
     },
   ];
 
-  /* const rows = [
-    // {sNo: , eventTitle: , location: ,startDate: , endDate: , time: , action: },
-    dataList.map((data)=>{
-      {
+  useEffect(() => {
+    setRows(
+      dataList.map((data, index) => ({
         id: data._id,
-        sNo: 1234,
-        eventTitle: data.name ,
-        location: data.location,
+        sNo: index + 1,
+        eventTitle: data.name,
+        location: data.address,
         startDate: data.startDate,
         endDate: data.endDate,
         time: data.publishDate,
         action: "view more",
-      },
-    })
-  ] */
+      }))
+    );
+  }, [dataList]);
 
-  const rows = dataList.map((data, index) => ({
+  /* const rows = dataList.map((data, index) => ({
     id: data._id,
     sNo: index + 1,
     eventTitle: data.name,
@@ -94,7 +94,7 @@ export default function DataTable({ dataList, triggerRefresh }) {
     endDate: data.endDate,
     time: data.publishDate,
     action: "view more",
-  }));
+  })); */
 
   function handleViewMore(row) {
     const filteredRow = dataList.find((data) => data._id === row.id);
@@ -179,6 +179,7 @@ export default function DataTable({ dataList, triggerRefresh }) {
   };
 
   const calculatedHeight = Math.min(totalRows * 44 + 100, 550);
+
   return (
     <>
       <Paper
