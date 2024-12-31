@@ -4,7 +4,7 @@ import EventStatusWise from '../components/event-status/EventStatusWise'
 function Event() {
   
   return (
-    <div className="bg-[#E0E7ED] h-screen">
+    <div className="bg-[#E0E7ED] h-dvh">
       <div className="p-4 ">
         <div>
           <h1 className="text-xl font-bold ">Event</h1>
