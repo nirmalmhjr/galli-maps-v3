@@ -9,7 +9,7 @@ import event from "../assets/images/event.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("event");
   const navigate = useNavigate();
 
   function handleSelection(item) {
