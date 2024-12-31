@@ -1,5 +1,3 @@
-// import Sidebar, { SideBarItem } from "./components/Sidebar";
-// import Topbar from "./components/Topbar";
 import Layout from "./layout/Layout";
 import Event from "./pages/Event";
 import LoginPage from "./pages/LoginPage";
@@ -10,7 +8,7 @@ import RequireAuth from "./components/RequireAuth";
 import Unauthorized from "./components/Unauthorized";
 import AddPlaces from "./pages/AddPlaces";
 import AddBusiness from "./pages/AddBusiness";
-import AddDepartment from "./pages/AddDepartment"
+import AddDepartment from "./pages/AddDepartment";
 
 function App() {
   return (
@@ -41,7 +39,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/business" element={<AddBusiness />} />
             <Route path="/department" element={<AddDepartment />} />
-            <Route path="/places" element={<AddPlaces />}/>
+            <Route path="/places" element={<AddPlaces />} />
             <Route path="/event" element={<Event />} />
             {/* Add more protected routes here */}
           </Route>

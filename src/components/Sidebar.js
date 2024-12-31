@@ -19,7 +19,6 @@ export default function Sidebar() {
 
   return (
     <aside className="h-screen">
-      {/* <nav className="h-full flex flex-col bg-white border-r shadow-sm w-60"> */}
       <nav className="h-full flex flex-col bg-white border-r shadow-sm ">
         <div className="p-4 pb-2 flex items-center justify-center border-b h-[68px]">
           <img
@@ -72,11 +71,3 @@ export default function Sidebar() {
   );
 }
 
-export function SideBarItem({ icon, text, active, alert }) {
-  return (
-    <li>
-      {icon}
-      <span>{text}</span>
-    </li>
-  );
-}
