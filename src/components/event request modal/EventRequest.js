@@ -153,6 +153,13 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     onCloseClick(false);
   };
 
+  function formatUrl(url) {
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      return "http://" + url;
+    }
+    return url;
+  }
+
   return (
     <div className="h-screen w-[572px] bg-white pl-4 overflow-auto ">
       <div className="bg-[#F6F5F5]  flex justify-between items-center h-14 ml-[-16px]">
@@ -255,12 +262,10 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             <p className="font-medium">{formatTime(row.endDate)}</p>
           </div>
           <div className="flex flex-col gap-y-1">
-            <p>Time</p>
-            <p className="font-medium">{formatTime(row.publishDate, "time")}</p>
-          </div>
-          <div className="flex flex-col gap-y-1">
             <p>Event type:</p>
-            <p className="font-medium">{row.category.name}</p>
+            <p className="font-medium">
+              {row.category.name} - {row.subCategory}
+            </p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Event Pricing:</p>
@@ -288,7 +293,10 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Requested Date:</p>
-            <p className="font-medium">{formatTime(row.publishDate)}</p>
+            <p className="font-medium">
+              {formatTime(row.publishDate)} -{" "}
+              {formatTime(row.publishDate, "time")}
+            </p>
           </div>
         </div>
 
@@ -297,6 +305,19 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           <h2>Description</h2>
           <p className="mt-2 font-medium">{row.description}</p>
         </div>
+        {/* Call to Action */}
+
+        {row.callToAction && (
+          <div className="mt-4 flex justify-center">
+            <a
+              href={formatUrl(row.clickLink)}
+              target="_blank"
+              className=" font-medium bg-[#af3d23] text-white p-2 px-3 rounded min-w-24"
+            >
+              {row.callToAction}
+            </a>
+          </div>
+        )}
 
         {/* Social Media */}
         <div className="mt-4">
@@ -376,8 +397,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             <Modal open={openEvent} onClose={handleCloseEvent}>
               <Box sx={style}>
                 <img
-                  onClick={handleOpenEvent}
-                  className="w-fit h-screen rounded mt-3"
+                  className="w-fit h-screen rounded mt-3 object-contain"
                   src={`https://assets-dev.gallimap.com${selectedImage}`}
                   alt=""
                 />
