@@ -3,16 +3,14 @@ import { createContext, useState, useEffect } from "react";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  // const [auth,setAuth] = useState({})
   const [auth, setAuth] = useState({});
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    // const role = sessionStorage.getItem("role");
+    const role = sessionStorage.getItem("role");
 
     if (token) {
-      //   setAuth(token, role);
-      setAuth(token);
+      setAuth(token, role);
     }
   }, []);
 
