@@ -9,12 +9,14 @@ function Unauthorized() {
   }
 
   return (
-    <section>
-      <h1>Unauthorized</h1>
+    <section className=" flex flex-col justify-center items-center h-screen">
+      <h1 className="text-3xl">Unauthorized</h1>
       <br />
       <p>You do not have access to the requested page.</p>
       <div className="flexGrow">
-        <button onClick={goBack}>Go Back</button>
+        <button className="bg-green-500 p-2 mt-4 rounded" onClick={goBack}>
+          Go Back
+        </button>
       </div>
     </section>
   );

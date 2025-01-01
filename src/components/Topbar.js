@@ -6,11 +6,13 @@ import user from "../assets/images/Ellipse 5.png";
 import changePassword from "../assets/images/lock-password.png";
 import logout from "../assets/images/logout.png";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 function Topbar() {
   const [open, setOpen] = useState(false);
   const clickRef = useRef(null);
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   function handleClickOutside(event) {
     if (clickRef.current && !clickRef.current.contains(event.target)) {
@@ -21,18 +23,18 @@ function Topbar() {
   useEffect(() => {
     if (open) {
       //Add eventListener when component mounts
-      // document.addEventListener("mouseover", handleClickOutside);
       document.addEventListener("mousedown", handleClickOutside);
     }
     //remove the eventListner when component unmounts
     return () => {
-      // document.removeEventListener("mouseover", handleClickOutside);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [open]);
 
   function handleLogout() {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role");
+    setAuth(null);
     navigate("/login", { replace: true });
   }
 
