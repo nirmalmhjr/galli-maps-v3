@@ -64,6 +64,7 @@ function LoginPage() {
       const token = response?.data?.data?.token;
       const role = response?.data?.data?.user?.role;
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem("role", role);
       setAuth({ email, password, role, token });
 
       navigate("/event", { replace: true });

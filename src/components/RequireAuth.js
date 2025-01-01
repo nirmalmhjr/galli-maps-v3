@@ -5,28 +5,27 @@ export default function RequireAuth({ allowedRoles }) {
   const { auth } = useAuth();
   const location = useLocation();
 
-  
-    // auth?.user? <Outlet /> : <Navigate to="/LoginPage" state={{from: location }} replace/>
-    // auth?.role?.find((role) => allowedRoles.includes(role)) ? (
-    /* auth?.role === allowedRoles ? (
-      <Outlet />
-    ) : auth?.userName ? (
-      <Navigate to="/unauthorized" state={{ from: location }} replace />
-    ) : (
-      <Navigate to="login" state={{ from: location }} replace />
-    )
-  ); */
+  const token = sessionStorage.getItem("token");
+  const storedRole = sessionStorage.getItem("role");
 
-  if(!auth?.token){
+  if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  const userRole = auth?.role || storedRole;
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  //   if(!auth?.token){
+  //     return <Navigate to="/login" state={{ from: location }} replace />;
+  // }
+
+  // if (allowedRoles && !allowedRoles.includes(auth?.role)) {
+  // // if (allowedRoles && !allowedRoles === auth?.role) {
+  //   return <Navigate to="/unauthorized" replace />
+  // }
+
+  return <Outlet />;
 }
-
-if (allowedRoles && !allowedRoles.includes(auth?.role)) {
-// if (allowedRoles && !allowedRoles === auth?.role) {
-  return <Navigate to="/unauthorized" replace />
-}
-
-
-return <Outlet/>
-}
-
