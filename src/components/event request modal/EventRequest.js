@@ -6,6 +6,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { formatTime } from "../../utils/dateTimeConverter";
 import conf from "../../conf/conf";
+import Minimizedmap from "../Minimizedmap";
+import PanoromicImage from "../PanoromicImage";
 
 const style = {
   position: "absolute",
@@ -106,9 +108,17 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
   const [open, setOpen] = useState(false);
   const [openEvent, setOpenEvent] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [openMap, setOpenMap] = useState(false);
 
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
+
+  const handleMapOpen = () => {
+    // setOpenEvent(false)
+    setOpenMap(true);
+  };
+  const handleMapClose = () => setOpenMap(false);
 
   const handleOpenEvent = (image) => {
     setOpenEvent(true);
@@ -242,6 +252,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             Reject
           </Button>
         </div>
+        {/* <Minimizedmap /> */}
 
         {/* details part */}
         <div className="mt-4 grid grid-cols-2 gap-y-4">
@@ -252,6 +263,12 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           <div className="flex flex-col gap-y-1">
             <p>Location:</p>
             <p className="font-medium">{row.address}</p>
+            <p
+              className="underline underline-offset-4 text-[#295BFF] cursor-pointer"
+              onClick={handleMapOpen}
+            >
+              view on Map
+            </p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Start Date:</p>
@@ -308,11 +325,12 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
         {/* Call to Action */}
 
         {row.callToAction && (
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4">
+            <h2 className="mb-3">Click to action</h2>
             <a
               href={formatUrl(row.clickLink)}
               target="_blank"
-              className=" font-medium bg-[#af3d23] text-white p-2 px-3 rounded min-w-24"
+              className=" font-medium bg-[#af3d23] text-white p-2 px-3 rounded min-w-20 text-center"
             >
               {row.callToAction}
             </a>
@@ -359,26 +377,36 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
         </div>
 
         {/* Event Banner */}
-        <div className="mt-4">
+        <div className="mt-4 h-40">
           <h2 className="border-b font-medium">Event Banner</h2>
-          {bannerImage && (
-            <img
-              onClick={handleOpen}
-              className="w-36 h-32 rounded mt-3 object-cover"
-              src={`https://assets-dev.gallimap.com${bannerImage}`}
-              alt=""
-            />
-          )}
-          <Modal open={open} onClose={handleClose}>
-            <Box sx={style}>
-              <img
-                onClick={handleOpen}
-                className="w-fit h-screen rounded mt-3"
-                src={`https://assets-dev.gallimap.com${bannerImage}`}
-                alt=""
+          <div className={`flex ${bannerImage ? "space-x-4" : ""}`}>
+            <div>
+              {bannerImage && (
+                <img
+                  onClick={handleOpen}
+                  className="w-36 h-32 rounded mt-3 object-cover"
+                  src={`https://assets-dev.gallimap.com${bannerImage}`}
+                  alt=""
+                />
+              )}
+              <Modal open={open} onClose={handleClose}>
+                <Box sx={style}>
+                  <img
+                    onClick={handleOpen}
+                    className="w-fit h-screen rounded mt-3"
+                    src={`https://assets-dev.gallimap.com${bannerImage}`}
+                    alt=""
+                  />
+                </Box>
+              </Modal>
+            </div>
+            <div className="w-36 h-28 ">
+              <PanoromicImage
+                latitude={row.location.coordinates[0]}
+                longitude={row.location.coordinates[1]}
               />
-            </Box>
-          </Modal>
+            </div>
+          </div>
         </div>
 
         {/* Event Image */}
@@ -405,6 +433,17 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             </Modal>
           </div>
         </div>
+        {/* Map */}
+        <Modal open={openMap} onClose={handleMapClose}>
+          <Box sx={{ ...style, width: "60%" }}>
+            <div className="w-auto h-screen    flex items-center justify-center ">
+              <Minimizedmap
+                lng={row.location.coordinates[1]}
+                lat={row.location.coordinates[0]}
+              />
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );
