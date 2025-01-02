@@ -19,10 +19,10 @@ export function formatTime(isoString, value = "date") {
 
   // const formattedTime = hours + " " + ampm;
   const formattedTime = hours + ":" + formattedMinutes + " " + ampm;
-  // const formattedDate = year + "/" + month + "/" + day;
+  const formattedDate = year + "/" + month + "/" + day;
 
   const nepaliDate = new NepaliDate(date).format("YYYY/MM/DD");
 
-  // return value === "date" ? formattedDate : formattedTime;
-  return value === "date" ? nepaliDate : formattedTime;
+  return value === "date" ? formattedDate : formattedTime;
+  // return value === "date" ? nepaliDate : formattedTime;
 }

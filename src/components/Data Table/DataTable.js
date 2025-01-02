@@ -98,6 +98,7 @@ export default function DataTable({ dataList, triggerRefresh }) {
 
   function handleViewMore(row) {
     const filteredRow = dataList.find((data) => data._id === row.id);
+    console.log(filteredRow);
     setOpen(true);
     setSelectedRow(filteredRow);
   }
