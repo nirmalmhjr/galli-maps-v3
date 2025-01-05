@@ -16,13 +16,14 @@ export function formatTime(isoString, value = "date") {
 
   const formattedMinutes =
     minutes == 0 ? "" : minutes < 10 ? `0${minutes}` : minutes;
-
-  // const formattedTime = hours + " " + ampm;
-  const formattedTime = hours + ":" + formattedMinutes + " " + ampm;
-  // const formattedDate = year + "/" + month + "/" + day;
+  // const formattedTime = hours + ":" + formattedMinutes + " " + ampm;
+  const formattedTime = !formattedMinutes
+    ? hours + " " + ampm
+    : hours + ":" + formattedMinutes + " " + ampm;
+  const formattedDate = year + "/" + month + "/" + day;
 
   const nepaliDate = new NepaliDate(date).format("YYYY/MM/DD");
 
-  // return value === "date" ? formattedDate : formattedTime;
-  return value === "date" ? nepaliDate : formattedTime;
+  return value === "date" ? formattedDate : formattedTime;
+  // return value === "date" ? nepaliDate : formattedTime;
 }

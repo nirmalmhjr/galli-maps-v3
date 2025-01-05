@@ -6,6 +6,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { formatTime } from "../../utils/dateTimeConverter";
 import conf from "../../conf/conf";
+import Minimizedmap from "../Minimizedmap";
+import PanoromicImage from "../PanoromicImage";
 
 const style = {
   position: "absolute",
@@ -23,6 +25,8 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     instagram: "-",
     tiktok: "-",
   });
+
+  const [panoromicImageLoaded, setPanoromicImageLoaded] = useState(true);
 
   useEffect(() => {
     let overallDatas = {};
@@ -106,9 +110,18 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
   const [open, setOpen] = useState(false);
   const [openEvent, setOpenEvent] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [openMap, setOpenMap] = useState(false);
+  const [bannerImage, setBannerImage] = useState("");
 
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
+
+  const handleMapOpen = () => {
+    // setOpenEvent(false)
+    setOpenMap(true);
+  };
+  const handleMapClose = () => setOpenMap(false);
 
   const handleOpenEvent = (image) => {
     setOpenEvent(true);
@@ -119,11 +132,21 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     setSelectedImage(null);
   };
 
-  const bannerImage = row.bannerImage
+  /* const bannerImage = row.bannerImage
     ? row.bannerImage
     : row.image
     ? row.image
-    : "";
+    : ""; */
+
+  useEffect(() => {
+    const image = row.bannerImage
+      ? row.bannerImage
+      : row.image
+      ? row.image
+      : "";
+
+    setBannerImage(image);
+  }, [row]);
 
   const token = sessionStorage.getItem("token");
 
@@ -152,6 +175,13 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
 
     onCloseClick(false);
   };
+
+  function formatUrl(url) {
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      return "http://" + url;
+    }
+    return url;
+  }
 
   return (
     <div className="h-screen w-[572px] bg-white pl-4 overflow-auto ">
@@ -235,6 +265,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             Reject
           </Button>
         </div>
+        {/* <Minimizedmap /> */}
 
         {/* details part */}
         <div className="mt-4 grid grid-cols-2 gap-y-4">
@@ -245,6 +276,12 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           <div className="flex flex-col gap-y-1">
             <p>Location:</p>
             <p className="font-medium">{row.address}</p>
+            <p
+              className="underline underline-offset-4 text-blue-500  cursor-pointer hover:text-blue-700"
+              onClick={handleMapOpen}
+            >
+              view on Map
+            </p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Start Date:</p>
@@ -255,12 +292,10 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             <p className="font-medium">{formatTime(row.endDate)}</p>
           </div>
           <div className="flex flex-col gap-y-1">
-            <p>Time</p>
-            <p className="font-medium">{formatTime(row.publishDate, "time")}</p>
-          </div>
-          <div className="flex flex-col gap-y-1">
             <p>Event type:</p>
-            <p className="font-medium">{row.category.name}</p>
+            <p className="font-medium">
+              {row.category.name} - {row.subCategory}
+            </p>
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Event Pricing:</p>
@@ -288,7 +323,10 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           </div>
           <div className="flex flex-col gap-y-1">
             <p>Requested Date:</p>
-            <p className="font-medium">{formatTime(row.publishDate)}</p>
+            <p className="font-medium">
+              {formatTime(row.publishDate)} -{" "}
+              {formatTime(row.publishDate, "time")}
+            </p>
           </div>
         </div>
 
@@ -297,6 +335,20 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
           <h2>Description</h2>
           <p className="mt-2 font-medium">{row.description}</p>
         </div>
+        {/* Call to Action */}
+
+        {row.callToAction && (
+          <div className="mt-4">
+            <h2 className="mb-3">Click to action</h2>
+            <a
+              href={formatUrl(row.clickLink)}
+              target="_blank"
+              className=" font-medium bg-[#af3d23] text-white p-2 px-3 rounded min-w-20 text-center"
+            >
+              {row.callToAction}
+            </a>
+          </div>
+        )}
 
         {/* Social Media */}
         <div className="mt-4">
@@ -310,58 +362,97 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
                   : getSocialMediaHandle(row.organizer, "website")}
                 {row.organizer.website} */}
                 {/* {getSocialMediaHandle(row.organizer, "website")} */}
-                {socialMedia.website}
+                <a
+                  href={formatUrl(socialMedia.website)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.website}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Facebook</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "facebook")} */}
-                {socialMedia.facebook}
+                <a
+                  href={formatUrl(socialMedia.facebook)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.facebook}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Instagram</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "instagram")} */}
-                {socialMedia.instagram}
+                <a
+                  href={formatUrl(socialMedia.instagram)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.instagram}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Tiktok</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "tiktok")} */}
-                {socialMedia.tiktok}
+                <a
+                  href={formatUrl(socialMedia.tiktok)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.tiktok}
+                </a>
               </p>
             </div>
           </div>
         </div>
 
         {/* Event Banner */}
-        <div className="mt-4">
+        <div className="mt-4 mb-8 ">
           <h2 className="border-b font-medium">Event Banner</h2>
-          {bannerImage && (
-            <img
-              onClick={handleOpen}
-              className="w-36 h-32 rounded mt-3 object-cover"
-              src={`https://assets-dev.gallimap.com${bannerImage}`}
-              alt=""
-            />
-          )}
-          <Modal open={open} onClose={handleClose}>
-            <Box sx={style}>
-              <img
-                onClick={handleOpen}
-                className="w-fit h-screen rounded mt-3"
-                src={`https://assets-dev.gallimap.com${bannerImage}`}
-                alt=""
-              />
-            </Box>
-          </Modal>
+          <div
+            className={`flex items-center ${bannerImage ? "space-x-4" : ""}`}
+          >
+            <div>
+              {bannerImage && (
+                <img
+                  onClick={handleOpen}
+                  className="w-36 h-32 rounded mt-3 object-cover"
+                  src={`https://assets-dev.gallimap.com${bannerImage}`}
+                  alt=""
+                />
+              )}
+              <Modal open={open} onClose={handleClose}>
+                <Box sx={style}>
+                  <img
+                    onClick={handleOpen}
+                    className="w-fit h-screen rounded mt-3"
+                    src={`https://assets-dev.gallimap.com${bannerImage}`}
+                    alt=""
+                  />
+                </Box>
+              </Modal>
+            </div>
+            {panoromicImageLoaded && (
+              <div className="w-36 h-32 mb-1">
+                <PanoromicImage
+                  latitude={row.location.coordinates[0]}
+                  longitude={row.location.coordinates[1]}
+                  onLoad={(newValue) => setPanoromicImageLoaded(newValue)}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Event Image */}
-        <div className="mt-4 mb-4">
+        <div className="mt-4 mb-8">
           <h2 className="border-b font-medium">Event Image</h2>
           <div className="flex flex-wrap ">
             {row.images.map((image, index) => (
@@ -376,8 +467,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             <Modal open={openEvent} onClose={handleCloseEvent}>
               <Box sx={style}>
                 <img
-                  onClick={handleOpenEvent}
-                  className="w-fit h-screen rounded mt-3"
+                  className="w-fit h-screen rounded mt-3 object-contain"
                   src={`https://assets-dev.gallimap.com${selectedImage}`}
                   alt=""
                 />
@@ -385,6 +475,17 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             </Modal>
           </div>
         </div>
+        {/* Map */}
+        <Modal open={openMap} onClose={handleMapClose}>
+          <Box sx={{ ...style, width: "60%" }}>
+            <div className="w-auto h-screen    flex items-center justify-center ">
+              <Minimizedmap
+                lng={row.location.coordinates[1]}
+                lat={row.location.coordinates[0]}
+              />
+            </div>
+          </Box>
+        </Modal>
       </div>
     </div>
   );

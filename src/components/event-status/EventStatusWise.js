@@ -17,6 +17,8 @@ export default function EventStatusWise() {
     approved: [],
     rejected: [],
     requestCount: 0,
+    approvedCount: 0,
+    rejectCount: 0,
   });
 
   const token = sessionStorage.getItem("accessToken");
@@ -46,6 +48,8 @@ export default function EventStatusWise() {
         approved,
         rejected,
         requestCount: request.length,
+        approvedCount: approved.length,
+        rejectCount: rejected.length,
       });
     } catch (error) {
       console.log("Error from Fetching Data ", error);
@@ -87,33 +91,55 @@ export default function EventStatusWise() {
                   >
                     Request
                   </span>
-                  {value === "1" && (
-                    <Chip
-                      size="small"
-                      label={eventData.requestCount}
-                      sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
-                    />
-                  )}
+                  <Chip
+                    size="small"
+                    label={eventData.requestCount}
+                    sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
+                  />
                 </Box>
               }
             />
             <Tab
-              label="Approved"
               value="2"
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Satoshi",
-                textTransform: "none",
-              }}
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "Satoshi",
+                      textTransform: "none",
+                    }}
+                  >
+                    Approved
+                  </span>
+                  <Chip
+                    size="small"
+                    label={eventData.approvedCount}
+                    sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
+                  />
+                </Box>
+              }
             />
             <Tab
-              label="Rejected"
               value="3"
-              sx={{
-                fontSize: "14px",
-                fontFamily: "Satoshi",
-                textTransform: "none",
-              }}
+              label={
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontFamily: "Satoshi",
+                      textTransform: "none",
+                    }}
+                  >
+                    Rejected
+                  </span>
+                  <Chip
+                    size="small"
+                    label={eventData.rejectCount}
+                    sx={{ bgcolor: "#F9E3DA", color: "#E37547" }}
+                  />
+                </Box>
+              }
             />
           </TabList>
         </Box>
