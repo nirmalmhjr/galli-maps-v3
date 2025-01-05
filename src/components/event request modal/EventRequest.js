@@ -277,7 +277,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
             <p>Location:</p>
             <p className="font-medium">{row.address}</p>
             <p
-              className="underline underline-offset-4 text-[#295BFF] cursor-pointer"
+              className="underline underline-offset-4 text-blue-500  cursor-pointer hover:text-blue-700"
               onClick={handleMapOpen}
             >
               view on Map
