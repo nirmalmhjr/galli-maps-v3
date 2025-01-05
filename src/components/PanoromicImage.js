@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import conf from "../conf/conf";
 
-export default function PanoromicImage({ latitude, longitude }) {
+// export default function PanoromicImage({ latitude, longitude}) {
+export default function PanoromicImage({ latitude, longitude, onLoad }) {
   const [viewImage, setViewImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const zoom = 20;
@@ -22,13 +23,16 @@ export default function PanoromicImage({ latitude, longitude }) {
         const geojson = await response.json();
         if (response && response.status === 200) {
           setViewImage(geojson.data);
+          onLoad(true);
         } else if (response && response.status === 404) {
           console.log("failed to fetch panoimage");
           setViewImage(null); // Set to null or any default value
+          onLoad(false);
         }
       } catch (error) {
         console.error("Failed to fetch panoimage", error);
         setViewImage(null); // Set to null or any default value
+        onLoad(false);
       } finally {
         setLoading(false);
       }
@@ -48,8 +52,10 @@ export default function PanoromicImage({ latitude, longitude }) {
           >
             <ReactPhotoSphereViewer
               src={viewImage.imgurl}
-              height={"18.5vh"}
-              width={"27vh"}
+              // height={"18vh"}
+              // width={"27vh"}
+              height={"128px"}
+              width={"144px"}
             ></ReactPhotoSphereViewer>
           </div>
         </>

@@ -26,6 +26,8 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     tiktok: "-",
   });
 
+  const [panoromicImageLoaded, setPanoromicImageLoaded] = useState(true);
+
   useEffect(() => {
     let overallDatas = {};
 
@@ -109,6 +111,7 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
   const [openEvent, setOpenEvent] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [openMap, setOpenMap] = useState(false);
+  const [bannerImage, setBannerImage] = useState("");
 
   const handleOpen = () => setOpen(true);
 
@@ -129,11 +132,21 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
     setSelectedImage(null);
   };
 
-  const bannerImage = row.bannerImage
+  /* const bannerImage = row.bannerImage
     ? row.bannerImage
     : row.image
     ? row.image
-    : "";
+    : ""; */
+
+  useEffect(() => {
+    const image = row.bannerImage
+      ? row.bannerImage
+      : row.image
+      ? row.image
+      : "";
+
+    setBannerImage(image);
+  }, [row]);
 
   const token = sessionStorage.getItem("token");
 
@@ -349,37 +362,63 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
                   : getSocialMediaHandle(row.organizer, "website")}
                 {row.organizer.website} */}
                 {/* {getSocialMediaHandle(row.organizer, "website")} */}
-                {socialMedia.website}
+                <a
+                  href={formatUrl(socialMedia.website)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.website}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Facebook</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "facebook")} */}
-                {socialMedia.facebook}
+                <a
+                  href={formatUrl(socialMedia.facebook)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.facebook}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Instagram</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "instagram")} */}
-                {socialMedia.instagram}
+                <a
+                  href={formatUrl(socialMedia.instagram)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.instagram}
+                </a>
               </p>
             </div>
             <div className="flex flex-col gap-y-2">
               <p>Tiktok</p>
               <p className="font-medium">
                 {/* {getSocialMediaHandle(row.organizer, "tiktok")} */}
-                {socialMedia.tiktok}
+                <a
+                  href={formatUrl(socialMedia.tiktok)}
+                  target="_blank"
+                  className="hover:text-blue-700"
+                >
+                  {socialMedia.tiktok}
+                </a>
               </p>
             </div>
           </div>
         </div>
 
         {/* Event Banner */}
-        <div className="mt-4 h-40">
+        <div className="mt-4 mb-8 ">
           <h2 className="border-b font-medium">Event Banner</h2>
-          <div className={`flex ${bannerImage ? "space-x-4" : ""}`}>
+          <div
+            className={`flex items-center ${bannerImage ? "space-x-4" : ""}`}
+          >
             <div>
               {bannerImage && (
                 <img
@@ -400,17 +439,20 @@ export default function EventRequest({ onCloseClick, row, triggerRefresh }) {
                 </Box>
               </Modal>
             </div>
-            <div className="w-36 h-28 ">
-              <PanoromicImage
-                latitude={row.location.coordinates[0]}
-                longitude={row.location.coordinates[1]}
-              />
-            </div>
+            {panoromicImageLoaded && (
+              <div className="w-36 h-32 mb-1">
+                <PanoromicImage
+                  latitude={row.location.coordinates[0]}
+                  longitude={row.location.coordinates[1]}
+                  onLoad={(newValue) => setPanoromicImageLoaded(newValue)}
+                />
+              </div>
+            )}
           </div>
         </div>
 
         {/* Event Image */}
-        <div className="mt-4 mb-4">
+        <div className="mt-4 mb-8">
           <h2 className="border-b font-medium">Event Image</h2>
           <div className="flex flex-wrap ">
             {row.images.map((image, index) => (
